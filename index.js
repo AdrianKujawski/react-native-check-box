@@ -20,6 +20,13 @@ import PropTypes from 'prop-types';
 
 
 export default class CheckBox extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            isChecked: props.isChecked
+        }
+    }
     static propTypes = {
         ...(ViewPropTypes || View.PropTypes),
         leftText: PropTypes.string,
@@ -42,7 +49,6 @@ export default class CheckBox extends Component {
         leftTextStyle: {},
         rightTextStyle: {}
     }
-
     static getDerivedStateFromProps(nextProps, prevState) {
         if (prevState.isChecked !== nextProps.isChecked) {
             return {
@@ -53,7 +59,7 @@ export default class CheckBox extends Component {
     }
     onClick() {
         this.setState({
-            isChecked: !this.props.isChecked
+            isChecked: !this.state.isChecked
         })
         this.props.onClick();
     }
@@ -76,27 +82,26 @@ export default class CheckBox extends Component {
         if (this.props.isIndeterminate){
             return this.props.indeterminateImage ? this.props.indeterminateImage : this.genCheckedImage();
         }
-        if (this.props.isChecked) {
+        if (this._isChecked()) {
             return this.props.checkedImage ? this.props.checkedImage : this.genCheckedImage();
         } else {
             return this.props.unCheckedImage ? this.props.unCheckedImage : this.genCheckedImage();
         }
     }
-
     genCheckedImage() {
         var source;
         if (this.props.isIndeterminate) {
             source = require('./img/ic_indeterminate_check_box.png');
         }
         else {
-            source = this.props.isChecked ? require('./img/ic_check_box.png') : require('./img/ic_check_box_outline_blank.png');
+            source = this._isChecked() ? require('./img/ic_check_box.png') : require('./img/ic_check_box_outline_blank.png');
         }
 
         return (
             <Image source={source} style={{tintColor: this.props.checkBoxColor}} />
         );
     }
-
+    _isChecked = () => (this.props.isChecked || this.state.isChecked)
     render() {
         return (
             <TouchableHighlight

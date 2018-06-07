@@ -82,7 +82,7 @@ export default class CheckBox extends Component {
         if (this.props.isIndeterminate){
             return this.props.indeterminateImage ? this.props.indeterminateImage : this.genCheckedImage();
         }
-        if (this._isChecked()) {
+        if (this.state.isChecked) {
             return this.props.checkedImage ? this.props.checkedImage : this.genCheckedImage();
         } else {
             return this.props.unCheckedImage ? this.props.unCheckedImage : this.genCheckedImage();
@@ -94,14 +94,13 @@ export default class CheckBox extends Component {
             source = require('./img/ic_indeterminate_check_box.png');
         }
         else {
-            source = this._isChecked() ? require('./img/ic_check_box.png') : require('./img/ic_check_box_outline_blank.png');
+            source = this.state.isChecked ? require('./img/ic_check_box.png') : require('./img/ic_check_box_outline_blank.png');
         }
 
         return (
             <Image source={source} style={{tintColor: this.props.checkBoxColor}} />
         );
     }
-    _isChecked = () => (this.props.isChecked || this.state.isChecked)
     render() {
         return (
             <TouchableHighlight
